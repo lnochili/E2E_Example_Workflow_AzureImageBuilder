@@ -39,8 +39,8 @@
             {
                 "type": "File",
                 "name": "downloadBuildArtifacts",
-                "sourceUri": "./*",
-                "destination":"/tmp"
+                "sourceUri": "./src/node-server.js",
+                "destination":"/var/www/myapp"
             },
 
             {
