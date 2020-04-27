@@ -1,7 +1,12 @@
-  
-#!/bin/sh
+#!/bin/bash
 
-sudo mkdir -p /var/www/myapp
-sudo cd /var/www/myapp
-sudo chmod ugo+rwx /var/www/myapp
-sudo echo "Hello world" > myapp.out
+#Install Node and npm
+sudo apt update
+sudo apt install nodejs
+sudo apt install npm
+
+echo "Nodejs version is: "
+nodejs --version
+
+cd /var/www/myapp
+sudo npm  init --force
