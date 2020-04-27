@@ -1,0 +1,71 @@
+{
+    "type": "Microsoft.VirtualMachineImages",
+    "apiVersion": "2019-05-01-preview",
+    "location": "westus2",
+    "dependsOn": [],
+    
+    "properties": {
+
+        "buildTimeoutInMinutes" : 80,
+
+        "vmProfile": 
+            {
+            "vmSize": "Standard_D1_v2",
+            "osDiskSizeGB": 30
+            },
+        
+        "source": {
+            "type": "PlatformImage",
+                "publisher": "Canonical",
+                "offer": "UbuntuServer",
+                "sku": "18.04-LTS",
+                "version": "latest"
+            
+        },
+        "customize": [
+            {
+                "type": "Shell",
+                "name": "InstallUpgrades",
+                "inline": [
+                    "sudo apt install unattended-upgrades"
+                ]
+            }, 
+            {
+                "type": "Shell",
+                "name": "RunInstallScript",
+                "scriptUri": "./node-install.sh"
+            },
+            
+            {
+                "type": "File",
+                "name": "downloadBuildArtifacts",
+                "sourceUri": "./*",
+                "destination":"/tmp"
+            },
+
+            {
+                "type": "Shell",
+                "name": "AppInitialize",
+                "scriptUri": "./start-nodeapp.sh"
+            }
+            
+        ],
+        "distribute": 
+        [
+            {   
+                "type": "ManagedImage",
+                "imageId": "/subscriptions/a87c004e-36b1-4eef-b8f3-ec8a539d10ea/resourceGroups/ibLinuxGalleryRG/providers/Microsoft.Compute/images/aib-e2e-example"                        
+                "location": "westus2",
+                "runOutputName": "E2E_example",
+                "artifactTags": {
+                    "source": "azureVmImageBuilder",
+                    "baseosimg": "ubuntu1804"
+                },
+                "replicationRegions": [
+                  "westus2",
+                  "westcentralus"
+                ]
+            }
+        ]
+    }
+}
