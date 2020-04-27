@@ -7,6 +7,3 @@ sudo apt install npm
 
 echo "Nodejs version is: "
 nodejs --version
-
-cd /var/www/myapp
-sudo npm  init --force
