@@ -7,3 +7,5 @@ sudo apt install npm
 
 echo "Nodejs version is: "
 nodejs --version
+
+sudo mkdir /var/www/myapp
