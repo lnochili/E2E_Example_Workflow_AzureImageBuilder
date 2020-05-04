@@ -1,5 +1,5 @@
 # https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts
-# Azure Image Builder work flow using Azure CLI
+# Azure Image Builder work flow using Azure CLI to push the artifacts from the Github repo
 
 name: Azure image builder jobs
 on:
