@@ -1,5 +1,5 @@
 
 cd /var/www/myapp
-sudo mv /tmp/server.js .
-sudo chmod ugo+x server.js
-sudo npm  init --force
+"echo 'packer' | sudo -S mv /tmp/server.js .
+"echo 'packer' | sudo -S chmod ugo+x server.js
+"echo 'packer' | sudo -S npm  init --force
