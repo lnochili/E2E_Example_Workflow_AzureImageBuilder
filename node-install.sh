@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #Install Node and npm
-sudo apt update
-sudo apt install nodejs
-sudo apt install npm
+"echo 'packer' | sudo -S apt update
+"echo 'packer' | sudo -S apt install nodejs
+"echo 'packer' | sudo -S apt install npm
 
 echo "Nodejs version is: "
-nodejs --version
+"echo 'packer' | sudo -S nodejs --version
 
-sudo mkdir /var/www/myapp
+"echo 'packer' | sudo -S mkdir /var/www/myapp
