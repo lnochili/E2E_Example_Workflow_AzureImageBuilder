@@ -35,6 +35,7 @@ jobs:
             az account show --query id > $GITHUB_WORKSPACE/aib_local/subscriptionId.out
             az group create -n ${{ env.distributor_resource_group }} -l ${{ env.image_location }} 
             cat $GITHUB_WORKSPACE/aib_local/subscriptionId.out
+            
       - name: Create azure Image builder template   
         uses: azure/cli@v1
         with:
