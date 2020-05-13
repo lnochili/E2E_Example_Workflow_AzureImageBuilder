@@ -17,8 +17,7 @@ jobs:
       os_type: "Linux"
       distributor_resource_group: "iblinuxGalleryRG"
       image_name: "aib-Ubuntu18.04LTS"
-      image_location: "westcentralus"
-
+      image_location: "westus2"
     steps:
       - name: 'Checkout Github Action'
         uses: actions/checkout@master
