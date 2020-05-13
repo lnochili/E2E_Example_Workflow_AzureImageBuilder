@@ -3,9 +3,9 @@
 
 name: Azure image builder jobs
 on:
-  push:
-    paths: 
-      [ .github/workflows/aib_e2e_cli_example.yml , aib_template.json ]
+  [ push ]
+#    paths: 
+#      [ .github/workflows/aib_e2e_cli_example.yml , aib_template.json ]
 
 jobs:
   job_1:
