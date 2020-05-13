@@ -7,20 +7,16 @@
     "properties": {
 
         "buildTimeoutInMinutes" : 80,
-
-        "vmProfile": 
-            {
+        "vmProfile": {
             "vmSize": "Standard_D1_v2",
             "osDiskSizeGB": 30
-            },
-        
+        },
         "source": {
             "type": "PlatformImage",
                 "publisher": "Canonical",
                 "offer": "UbuntuServer",
                 "sku": "18.04-LTS",
-                "version": "latest"
-            
+                "version": "latest"        
         },
         "customize": [
            {
@@ -39,7 +35,6 @@
                 "name": "AppInitialize",
                 "scriptUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/start-nodeapp.sh"
             }
-            
         ],
         "distribute": 
         [
