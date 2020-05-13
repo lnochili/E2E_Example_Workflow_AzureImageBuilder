@@ -14,11 +14,6 @@ jobs:
     env:
       image_template_name: "aib-github-linux"
       run_output_name: $GITHUB_RUN_NUMBER
-      type: "PlatformImage"
-      publisher: "Canonical"
-      offer: "aib-UbuntuServer"
-      sku: "18.04-LTS"
-      version: "latest"    
       os_type: "Linux"
       distributor_resource_group: "iblinuxGalleryRG"
       image_name: "aib-Ubuntu18.04LTS"
