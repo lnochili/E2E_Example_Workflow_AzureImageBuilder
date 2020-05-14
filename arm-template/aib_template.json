@@ -1,7 +1,7 @@
 {
     "type": "Microsoft.VirtualMachineImages",
     "apiVersion": "2019-05-01-preview",
-    "location": "westus2",
+    "location": "<imageBuilderTemplateLocation>",
     "dependsOn": [],
     
     "properties": {
@@ -40,8 +40,8 @@
         [
             {   
                 "type": "ManagedImage",
-                "imageId": "/subscriptions/a87c004e-36b1-4eef-b8f3-ec8a539d10ea/resourceGroups/ibLinuxGalleryRG/providers/Microsoft.Compute/images/aib-e2e-example",                        
-                "location": "westus2",
+                "imageId": "/subscriptions/<subscriptionId>/resourceGroups/<ResourceGroupName>/providers/Microsoft.Compute/images/<ManagedImageName>",                        
+                "location": "<image location>",
                 "runOutputName": "E2E_example",
                 "artifactTags": {
                     "source": "azureVmImageBuilder",
