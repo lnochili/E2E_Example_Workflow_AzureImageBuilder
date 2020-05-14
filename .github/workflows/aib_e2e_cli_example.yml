@@ -40,7 +40,7 @@ jobs:
         uses: azure/cli@v1
         with:
           inlineScript: | 
-            curl https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/aib_template.json -o ./aib_template.json
+            curl https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/arm-template/aib_template.json -o ./aib_template.json
             cat ./aib_template.json
             ## az CLI for Azure image builder prepare and create template ##
             az image builder create --resource-group ${{ env.distributor_resource_group }} --image-template ./aib_template.json --name ${{ env.image_template_name }} 
