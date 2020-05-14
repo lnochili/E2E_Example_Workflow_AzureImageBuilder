@@ -14,4 +14,4 @@ then
     echo 'Creating directory'
     mkdir -p /var/www/myapp
 fi
-
+chmod 777 /var/www/myapp
