@@ -1,10 +1,12 @@
 # https://help.github.com/en/actions/configuring-and-managing-workflows/persisting-workflow-data-using-artifacts
 # Azure Image Builder work flow using Azure CLI to push the artifacts from the Github repo
 
+
 name: Azure image builder jobs
 on:
-  [ push ]
-#    paths: 
+  push:
+    paths: 
+      []
 #      [ .github/workflows/aib_e2e_cli_example.yml , aib_template.json ]
 
 jobs:
@@ -12,12 +14,11 @@ jobs:
     name: Azure Image builder run 
     runs-on: ubuntu-latest
     env:
-      image_template_name: "aib-github-linux"
+      image_template_name: "aib-github-linux"  # update the image template name of your choice
       run_output_name: $GITHUB_RUN_NUMBER
       os_type: "Linux"
-      distributor_resource_group: "iblinuxGalleryRG"
-      image_name: "aib-Ubuntu18.04LTS"
-      image_location: "westus2"
+      distributor_resource_group: "xxxxxxRG"  # Update the Azure Resource Group Name
+
     steps:
       - name: 'Checkout Github Action'
         uses: actions/checkout@master
@@ -27,16 +28,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: azure Image builder prerequisites
+      - name: Check azure Image builder prerequisites
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            mkdir $GITHUB_WORKSPACE/aib_local
-            az account show --query id > $GITHUB_WORKSPACE/aib_local/subscriptionId.out
-            az group create -n ${{ env.distributor_resource_group }} -l ${{ env.image_location }} 
-            cat $GITHUB_WORKSPACE/aib_local/subscriptionId.out
+            az account show --query id  
+            az group show -n ${{ env.distributor_resource_group }}  
             
-      - name: Create azure Image builder template   
+      - name: Create and run azure Image builder template   
         uses: azure/cli@v1
         with:
           inlineScript: | 
@@ -46,5 +45,4 @@ jobs:
             az image builder create --resource-group ${{ env.distributor_resource_group }} --image-template ./aib_template.json --name ${{ env.image_template_name }} 
             #### Run Image builder template run and create image version
             echo "Running the template"
-            az image builder show --resource-group ${{ env.distributor_resource_group }} --name ${{ env.image_template_name }}
             az image builder run --resource-group ${{ env.distributor_resource_group }}  --name ${{ env.image_template_name }} 
