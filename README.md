@@ -41,7 +41,27 @@ If they show up not registered, run the commented out code below.
 az role assignment create --assignee cf32a0cc-373c-47c9-9156-0db11f6a6dfc \
     --role Contributor --scope /subscriptions/$subscriptionID/resourceGroups/$aibResourceGroup
 ```
+Create an SPN with "Contributor" permissions to the Resource Group to be used.  Use the following command to create SPN: 
+```
+az ad sp create-for-rbac --sdk-auth > credentials.json
+cat credentials.json
+```
+The output of the above command will be in the format given below. 
 
+```
+{
+    "subscriptionId": "<azure_aubscription_id>",
+    "tenantId": "<tenant_id>",
+    "clientId": "<application_id>",
+    "clientSecret": "<application_secret>",
+    "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+    "resourceManagerEndpointUrl": "https://management.azure.com/",
+    "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+    "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+    "galleryEndpointUrl": "https://gallery.azure.com/",
+    "managementEndpointUrl": "https://management.core.windows.net/"
+}
+```
 ### Code to do steps 2
 ```bash
 # Setup workflow environment variables
@@ -80,29 +100,13 @@ The yml file defines the workflow with the job and required steps to
 3. Run the Image builder template to customize the Image  with nodejs, npm and nodejs app.
 3. Creates Managed Image in the location given by the user
 
-### Settings required to the Workflow
+### Set up Azure Secrets to run the Workflow
 Before you run this workflow, configure the Azure credentials in Github Secrets.
 To do this, select  Settings -> Secrets -> Add Secret.
 
-Create an SPN with "Contributor" permissions to the Resource Group to be used.  Use the following command to create SPN: 
-```
-az ad sp create-for-rbac --sdk-auth > credentials.json
-```
-The output of the above command will be in the format given below. Add the file contents as a Secret with name AZURE_CREDENTIALS:
-```
-{
-    "subscriptionId": "<azure_aubscription_id>",
-    "tenantId": "<tenant_id>",
-    "clientId": "<application_id>",
-    "clientSecret": "<application_secret>",
-    "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
-    "resourceManagerEndpointUrl": "https://management.azure.com/",
-    "activeDirectoryGraphResourceId": "https://graph.windows.net/",
-    "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
-    "galleryEndpointUrl": "https://gallery.azure.com/",
-    "managementEndpointUrl": "https://management.core.windows.net/"
-}
-```
+Copy the file contents of credentials.json and paste in the window for Secret and save the secret as  AZURE_CREDENTIALS
+
+
 ### Update the workflow
 
 Update the following mandatory user inputs in the workflow file, 
@@ -156,16 +160,19 @@ If the image customization has worked, you should see a webpage with /.  If you 
 
 * If you need to rerun the workflow, you need to delete the Azure Image Builder template.
 
-```bash
-# delete AIB Template prior to rerun
-az image builder delete -g <image_builder_resource_group>  -n <image_template_name>
 
-``
-*If you need to cleanup the resources created for this exercise, 
+## delete AIB Template prior to rerun
 ```
-# Delete the VM created for testing
+az image builder delete -g <image_builder_resource_group>  -n <image_template_name>
+```
+### If you need to cleanup the resources created for this exercise 
+
+#### Delete the VM created for testing
+```
 az vm delete --resource-group <vm-resource-group> --name $vmName 
-# delete the image 
+```
+### Delete the Managed image created
+```
 az image delete -g $distributer-resource-group -n $ManagedImageName
 
 ```
