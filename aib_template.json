@@ -28,7 +28,7 @@
                 "type": "File",
                 "name": "downloadBuildArtifacts",
                 "sourceUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/src/node_server.js",
-                "destination":"/var/www/myapp"
+                "destination":"/var/www/myapp/node_server.js"
             },
             {
                 "type": "Shell",
