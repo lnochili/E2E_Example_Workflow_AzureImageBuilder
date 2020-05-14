@@ -59,7 +59,7 @@ Import the code from this public Git Repo : https://github.com/lnochili/E2E_Exam
 
 ## Update the User inputs in JSON Template
 Update the Azure Resource Manager Template for Image Builder located in ~/arm-template directory.  All the user inputs are embbraced with < xxx >. The user inputs to be updated are: 
-1. <imageBuilderTemplateLocation>
+1. <<imageBuilderTemplateLocation>>
 2. <subscriptionId>
 3. <ResourceGroupName>
 4. <ManagedImageName>
