@@ -22,7 +22,7 @@
            {
                 "type": "Shell",
                 "name": "RunInstallScript",
-                "scriptUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/node-install.sh"
+                "scriptUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/src/install/node-install.sh"
             },
             {
                 "type": "File",
@@ -33,7 +33,7 @@
             {
                 "type": "Shell",
                 "name": "AppInitialize",
-                "scriptUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/start-nodeapp.sh"
+                "scriptUri": "https://raw.githubusercontent.com/lnochili/E2E_Example_Workflow_AzureImageBuilder/master/src/install/start-nodeapp.sh"
             }
         ],
         "distribute": 
