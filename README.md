@@ -12,11 +12,15 @@ In this example, Ubuntu 18.04 platform Image is customized with
    3. Configure the nodejs server application
 
 ## Prerequisites
-1. Ensure you have registered for the Image Builder and enable requirements (see code below).
-2. You must have a Github account and a Repo
+1. You must have a Github account and a Repo
+2. Ensure you have registered for the Image Builder and other feature requirements (see code below).
 3. Create a Resource Group(RG) - this will be used for running the Image Builder and also for image distribution (see code below)
 
-### Code to do steps 1 - Register and enable requirements
+### Create a Git Repo (Step 1)
+Login to Github, and 'Create Repo', call it 'MyAppImageBuilder'
+Import the code from this public Git Repo : https://github.com/lnochili/E2E_Example_Workflow_AzureImageBuilder
+
+### Code to do step 2 - Register and enable requirements
 ```bash
 az feature register --namespace Microsoft.VirtualMachineImages --name VirtualMachineTemplatePreview
 
@@ -30,7 +34,7 @@ az provider show -n Microsoft.Compute | grep registrationState
 az provider show -n Microsoft.KeyVault | grep registrationState
 ```
 
-If they show up not registered, run the commented out code below.
+If they do not show as registered, run the commented out code below.
 ```bash
 ## az provider register -n Microsoft.VirtualMachineImages
 ## az provider register -n Microsoft.Storage
@@ -62,31 +66,17 @@ The output of the above command will be in the format given below.
     "managementEndpointUrl": "https://management.core.windows.net/"
 }
 ```
-### Code to do steps 2
+
+### Code to do step 3
+Create the Resource Group in Azure Subscription if it is not existing. Image Builder service in its public preview is available only in limited Azure regions. Hence, set the location to a region where the Image builder service is availble.
+
 ```bash
-# Setup workflow environment variables
-image_template_name: "aib-github-linux"  # update the image template name of your choice
-run_output_name: $GITHUB_RUN_NUMBER      # Unique name or number of your choice
-os_type: "Linux"                         # Do not change 
-distributor_resource_group: "xxxxxxRG"   # Update the Azure Resource Group Name
+aibResourceGroup="<ResourceGroupName>"
+location="<AzureRegion>"  
 
 # create resource group
 az group create -n $aibResourceGroup -l $location
 ```
-## Create a Git Repo
-Login to Github, and 'Create Repo', call it 'MyAppImageBuilder'
-Import the code from this public Git Repo : https://github.com/lnochili/E2E_Example_Workflow_AzureImageBuilder
-
-## Update the User inputs in JSON Template
-Update the Azure Resource Manager Template for Image Builder located in ~/arm-template directory.  All the user inputs are embbraced with < xxx >. The user inputs to be updated are: 
-1. <'imageBuilderTemplateLocation'>
-2. <'subscriptionId'>
-3. <'ResourceGroupName'>
-4. <'ManagedImageName'>
-5. <'imageLocation'>
-
-Save changes and commit the JSON template file.
-
 ## Github Workflow (aib_e2e_github_workflow.yml) for running Azure Image Builder
 Once you import the code, the repo structure will be as  below:
 |_ src
@@ -100,14 +90,23 @@ The yml file defines the workflow with the job and required steps to
 3. Run the Image builder template to customize the Image  with nodejs, npm and nodejs app.
 3. Creates Managed Image in the location given by the user
 
-### Set up Azure Secrets to run the Workflow
+### Set up Azure Secrets to authenticate to Azure
 Before you run this workflow, configure the Azure credentials in Github Secrets.
 To do this, select  Settings -> Secrets -> Add Secret.
 
 Copy the file contents of credentials.json and paste in the window for Secret and save the secret as  AZURE_CREDENTIALS
 
+### Update the User inputs in ARM Template (~/arm-template/aib_template.json)
+Standard Azure Resource Manager Template for Image Builder is created and pre-filled with most of the inputs and you can locate the JSON file in ~/arm-template directory.  However, there are few inputs that are dependent on the user.  All the user inputs are embbraced with < xxx > and are listed below:
+1. <'imageBuilderTemplateLocation'>
+2. <'subscriptionId'>
+3. <'ResourceGroupName'>
+4. <'ManagedImageName'>
+5. <'imageLocation'>
 
-### Update the workflow
+Search for the above in the JSON file, Update inputs and commit the JSON template file.
+
+### Update the workflow (.github/workflows/aib_e2e_github_workflow.yml)
 
 Update the following mandatory user inputs in the workflow file, 
 1. image_template_name
@@ -119,12 +118,19 @@ Optionally, you can update the following inputs in the workflow file:
 
 Save Changes and commit the workflow file.
 
-### Start the Image Build
-* Click on 'Create Release', then 'Create'.
+### Run the Workflow
 
-About 30-40 later, the image should be distributed to both US regions.
+The workflow is triggered whenever a change is committed to the workflow file ( aib_e2e_github_workflow.yml) or the ARM template (arm-template\aib_template.json). In order to avoid workflow execution while doing the initial changes, the code for the triggers is commented. Once you are done with all the steps mentioned above in this document, you can enable the triggers by 
+
+* delete empty square brackets [] in  .github/workflows/aib_e2e_github_workflow.yml
+* uncomment the next line ' #[ .github/workflows/aib_e2e_github_workflow.yml , aib_template.json ] '
+* commit the changes 
+
+Once you commit the changes successfully, the workflow will be triggered to run. It may require 15 to 20 minutes to complete the Image build process.
+
 
 ## Testing the Image
+Once the Image build workflow was run successfully, you can test the image by creating a VM from the image by following the steps gien below:
 
 ```bash
  az image show -g <distributor-resource-group> -n <ManagedImageName>
@@ -132,8 +138,8 @@ About 30-40 later, the image should be distributed to both US regions.
 # Get the image resource Id from the output of above command 
 image="/subscriptions/xxxxxxx/resourceGroups/yyyyyyy/providers/Microsoft.Compute/images/zzzzzzz"
 
-# set vm name
-vmName=ubuntu-nodejs-vm
+# set vm name as per your choice
+vmName="<ubuntu-nodejs-vm-name>"
 
 # create VM
 az vm create \
@@ -147,11 +153,13 @@ az vm create \
 # open ports
 az vm open-port -g $aibResourceGroup -n $vmName --port 8080 --priority 100
 
+#login to the VM using its public IP and check for the customization
+nodejs --version
+npm --version
 
-#login to the VM using its public IP and run the node application
-#nodejs /var/www/myapp/node_server.js
-
-```
+# run the nodejs application
+cd /var/www/myapp
+nodejs nodejs_server.js
 
 From your local browser, goto: `http://<ipAddress>:8080`, where the <ipAddress> is the public IP of the VM. 
 If the image customization has worked, you should see a webpage with /.  If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on the webpage.
