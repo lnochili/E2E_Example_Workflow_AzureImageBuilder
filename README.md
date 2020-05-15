@@ -160,14 +160,15 @@ npm --version
 # run the nodejs application
 cd /var/www/myapp
 nodejs nodejs_server.js
-
+```
 From your local browser, goto: `http://<ipAddress>:8080`, where the <ipAddress> is the public IP of the VM. 
-If the image customization has worked, you should see a webpage with /.  If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on the webpage.
+If the image customization has worked, you should see a webpage with /.  
+   
+If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on the webpage.
 
 ## Clean Up
 
-* If you need to rerun the workflow, you need to delete the Azure Image Builder template.
-
+* If you need to rerun the workflow, you need to delete the Azure Image Builder template. 
 
 ## delete AIB Template prior to rerun
 ```
@@ -184,6 +185,5 @@ az vm delete --resource-group <vm-resource-group> --name $vmName
 az image delete -g $distributer-resource-group -n $ManagedImageName
 
 ```
-
 ## Next Steps
 for more details on Azure Image Builder, go through documentation.
