@@ -16,11 +16,12 @@ In this example, Ubuntu 18.04 platform Image is customized with
 2. Ensure you have registered for the Image Builder and other feature requirements (see code below).
 3. Create a Resource Group(RG) - this will be used for running the Image Builder and also for image distribution (see code below)
 
-### Create a Git Repo (Step 1)
+###  Create a Git Repo 
 Login to Github, and 'Create Repo', call it 'MyAppImageBuilder'
 Import the code from this public Git Repo : https://github.com/lnochili/E2E_Example_Workflow_AzureImageBuilder
 
-### Code to do step 2 - Register and enable requirements
+### Register and enable requirements
+
 ```bash
 az feature register --namespace Microsoft.VirtualMachineImages --name VirtualMachineTemplatePreview
 
@@ -67,7 +68,7 @@ The output of the above command will be in the format given below.
 }
 ```
 
-### Code to do step 3
+### Create Resource Group 
 Create the Resource Group in Azure Subscription if it is not existing. Image Builder service in its public preview is available only in limited Azure regions. Hence, set the location to a region where the Image builder service is availble.
 
 ```bash
@@ -126,10 +127,11 @@ The workflow is triggered whenever a change is committed to the workflow file ( 
 * uncomment the next line ' #[ .github/workflows/aib_e2e_github_workflow.yml , aib_template.json ] '
 * commit the changes 
 
-Once you commit the changes successfully, the workflow will be triggered to run. It may require 15 to 20 minutes to complete the Image build process.
+Once you commit the changes successfully, the workflow will be triggered to run. 
 
+It may require 15 to 20 minutes to complete the Image build process.
 
-## Testing the Image
+## Test the Image
 Once the Image build workflow was run successfully, you can test the image by creating a VM from the image by following the steps gien below:
 
 ```bash
@@ -166,21 +168,21 @@ If the image customization has worked, you should see a webpage with /.
    
 If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on the webpage.
 
-## Clean Up
+## Clean Up 
 
 * If you need to rerun the workflow, you need to delete the Azure Image Builder template. 
 
-## delete AIB Template prior to rerun
+### delete AIB Template prior to rerun
 ```
 az image builder delete -g <image_builder_resource_group>  -n <image_template_name>
 ```
-### If you need to cleanup the resources created for this exercise 
+### If you need to cleanup the resources created in this exercise 
 
-#### Delete the VM created for testing
+Delete the VM created for testing
 ```
 az vm delete --resource-group <vm-resource-group> --name $vmName 
 ```
-### Delete the Managed image created
+Delete the Managed image created
 ```
 az image delete -g $distributer-resource-group -n $ManagedImageName
 
