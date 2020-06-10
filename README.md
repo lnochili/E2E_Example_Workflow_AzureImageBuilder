@@ -172,7 +172,7 @@ If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on 
 
 * If you need to rerun the workflow, you need to delete the Azure Image Builder template. 
 
-### delete AIB Template prior to rerun
+### Delete AIB Template 
 ```
 az image builder delete -g <image_builder_resource_group>  -n <image_template_name>
 ```
