@@ -176,7 +176,7 @@ If you type  http://<ipAddress>:8080/helloworld, you should see 'helloworld' on 
 ```
 az image builder delete -g <image_builder_resource_group>  -n <image_template_name>
 ```
-### If you need to cleanup the resources created in this exercise 
+###To cleanup all the resources created in this exercise 
 
 Delete the VM created for testing
 ```
